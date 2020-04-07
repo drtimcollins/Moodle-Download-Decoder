@@ -6,15 +6,11 @@ var zipFile, csvFile;
 var d = fso.GetFolder('.');
 var FileCollection = d.Files;
 for(var f = new Enumerator(FileCollection); !f.atEnd(); f.moveNext()) {
-	//WScript.Echo(f.item());
 	if(fso.GetExtensionName(f.item()) == "zip")
 		zipFile = f.item();
 	if(fso.GetExtensionName(f.item()) == "csv")
 		csvFile = f.item();		
 }
-
-//WScript.Echo("Zip file: " + zipFile);
-//WScript.Echo("CSV file: " + csvFile);
 
 // Unzip the archive
 fso.CreateFolder('Submissions');
@@ -36,15 +32,8 @@ for(var n = 1; n < N; n++){
 		fso.MoveFile(f.item(), fso.BuildPath(fso.BuildPath('Submissions',MmuID),fso.GetFileName(f.item())));
 	}
 	fso.DeleteFolder(fso.BuildPath('Submissions',MoodleID));
-//	WScript.Echo(MoodleID + " - " + MmuID);
 }
 excel.Quit();
 
 WScript.Echo((N-1) + " Submissions decoded");
 WScript.Quit(0);
-
-
-
-
-
-
