@@ -25,13 +25,19 @@ var N = sheet.UsedRange.Rows.Count;
 for(var n = 1; n < N; n++){
 	var MoodleID = sheet.Range('B'+(n+1).toString()).Value;
 	var MmuID = sheet.Range('D'+(n+1).toString()).Value.substring(0,8);
-	fso.CreateFolder(fso.BuildPath('Submissions',MmuID));
-	d = fso.GetFolder(fso.BuildPath(fso.BuildPath('Submissions',MoodleID),'File submissions'));
-	FileCollection = d.Files;
-	for(var f = new Enumerator(FileCollection); !f.atEnd(); f.moveNext()) {
-		fso.MoveFile(f.item(), fso.BuildPath(fso.BuildPath('Submissions',MmuID),fso.GetFileName(f.item())));
+	//WScript.Echo(n + ": " + MoodleID + " -> " + MmuID);
+	try{
+		fso.CreateFolder(fso.BuildPath('Submissions',MmuID));
+		d = fso.GetFolder(fso.BuildPath(fso.BuildPath('Submissions',MoodleID),'File submissions'));
+		FileCollection = d.Files;
+		for(var f = new Enumerator(FileCollection); !f.atEnd(); f.moveNext()) {
+			fso.MoveFile(f.item(), fso.BuildPath(fso.BuildPath('Submissions',MmuID),fso.GetFileName(f.item())));
+		}
+		fso.DeleteFolder(fso.BuildPath('Submissions',MoodleID));
 	}
-	fso.DeleteFolder(fso.BuildPath('Submissions',MoodleID));
+	catch(err){
+		WScript.Echo("Error entry " + n + ": " + MoodleID + " -> " + MmuID + ". Error Message: " + err.message);
+	}
 }
 excel.Quit();
 
