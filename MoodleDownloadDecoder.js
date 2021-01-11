@@ -23,7 +23,9 @@ var sheet = oBook1.Sheets.Item(1);
 var N = sheet.UsedRange.Rows.Count;
 // For each entry, copy file from Moodle-coded folder to a new MMU ID named folder
 for(var n = 1; n < N; n++){
-	var MoodleID = sheet.Range('B'+(n+1).toString()).Value;
+	var sName = sheet.Range('C'+(n+1).toString()).Value;
+	var spos = sName.indexOf(' ');
+	var MoodleID =  sName.slice(spos+1,sName.length)+' '+sName.slice(0,spos)+'_'+sheet.Range('B'+(n+1).toString()).Value;
 	var MmuID = sheet.Range('D'+(n+1).toString()).Value.substring(0,8);
 	//WScript.Echo(n + ": " + MoodleID + " -> " + MmuID);
 	try{
@@ -37,6 +39,8 @@ for(var n = 1; n < N; n++){
 	}
 	catch(err){
 		WScript.Echo("Error entry " + n + ": " + MoodleID + " -> " + MmuID + ". Error Message: " + err.message);
+//		excel.Quit();
+//		WScript.Quit(0);
 	}
 }
 excel.Quit();
